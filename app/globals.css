@@ -1,22 +1,51 @@
 @import "tailwindcss";
 
 :root {
+  /* Colors: soft neutrals with one calm green accent. */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #102018;
+  --surface: #fbfefc;
+  --surface-muted: #f4faf6;
+  --muted: #5b6d62;
+  --accent: #1f7a45;
+  --accent-hover: #186339;
+  --accent-soft: #dceee3;
+  --accent-ring: #bfe7cc;
+  --border: #dceee3;
+
+  /* Spacing: generous by default, simple enough to remember. */
+  --space-page-x: 1.5rem;
+  --space-section-y: 4rem;
+
+  /* Radius: rounded, calm shapes without getting decorative. */
+  --radius-card: 2rem;
+  --radius-control: 999px;
+
+  /* Shadows: subtle lift only. */
+  --shadow-card: 0 24px 80px rgba(31, 95, 58, 0.08);
+  --shadow-control: 0 12px 30px rgba(31, 122, 69, 0.18);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ring: var(--accent-ring);
+  --color-border: var(--border);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --spacing-page-x: var(--space-page-x);
+  --spacing-section-y: var(--space-section-y);
+
+  --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-control: var(--shadow-control);
 }
 
 body {

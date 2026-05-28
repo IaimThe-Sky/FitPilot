@@ -24,7 +24,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 - `app/page.tsx` - landing page
 - `app/layout.tsx` - page metadata and root layout
+- `app/dashboard`, `app/progress`, `app/coach`, `app/onboarding` - initial app routes
 - `app/globals.css` - global styles and Tailwind import
+- `components/dashboard` - personalized dashboard UI
+- `components/layout` - reusable app shell and page width components
+- `components/onboarding` - local-state onboarding flow UI
 - `components/ui` - small reusable design system components and style tokens
 
 ## Scripts

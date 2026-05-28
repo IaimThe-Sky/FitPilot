@@ -11,10 +11,10 @@ type SectionTitleProps = {
 export function SectionTitle({ eyebrow, title, children }: SectionTitleProps) {
   return (
     <div className="text-center">
-      {eyebrow ? <p className={`mb-6 ${typography.eyebrow}`}>{eyebrow}</p> : null}
+      {eyebrow ? <p className={`mb-5 ${typography.eyebrow}`}>{eyebrow}</p> : null}
       <h1 className={typography.heading}>{title}</h1>
       {children ? (
-        <p className={`mx-auto mt-6 max-w-md ${typography.body}`}>{children}</p>
+        <p className={`mx-auto mt-5 max-w-md ${typography.body}`}>{children}</p>
       ) : null}
     </div>
   );

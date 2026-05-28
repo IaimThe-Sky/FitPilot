@@ -14,8 +14,9 @@
   --border: #dceee3;
 
   /* Spacing: generous by default, simple enough to remember. */
-  --space-page-x: 1.5rem;
-  --space-section-y: 4rem;
+  --space-page-x: clamp(1rem, 4vw, 1.5rem);
+  --space-section-y: clamp(2rem, 7vw, 3.5rem);
+  --space-section-gap: clamp(1.25rem, 4vw, 1.75rem);
 
   /* Radius: rounded, calm shapes without getting decorative. */
   --radius-card: 2rem;
@@ -40,6 +41,7 @@
 
   --spacing-page-x: var(--space-page-x);
   --spacing-section-y: var(--space-section-y);
+  --spacing-section-gap: var(--space-section-gap);
 
   --radius-card: var(--radius-card);
   --radius-control: var(--radius-control);

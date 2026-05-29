@@ -4,9 +4,10 @@ import {
   createContext,
   useContext,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
+import { storageKeys } from "@/lib/storage";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 export type OnboardingValues = {
   name: string;
@@ -37,16 +38,17 @@ const OnboardingContext = createContext<OnboardingContextValue | null>(null);
 
 // Use OnboardingProvider for temporary client-only onboarding state.
 export function OnboardingProvider({ children }: { children: ReactNode }) {
-  const [onboardingValues, setOnboardingValues] = useState<OnboardingValues>(
+  const [onboardingValues, saveOnboardingValues] = useLocalStorageState(
+    storageKeys.onboarding,
     initialOnboardingValues,
   );
 
   const value = useMemo(
     () => ({
       onboardingValues,
-      saveOnboardingValues: setOnboardingValues,
+      saveOnboardingValues,
     }),
-    [onboardingValues],
+    [onboardingValues, saveOnboardingValues],
   );
 
   return (

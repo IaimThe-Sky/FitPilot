@@ -30,6 +30,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `components/layout` - reusable app shell and page width components
 - `components/onboarding` - local-state onboarding flow UI
 - `components/ui` - small reusable design system components and style tokens
+- `lib/storage.ts` - small browser local storage helpers
 
 ## Scripts
 

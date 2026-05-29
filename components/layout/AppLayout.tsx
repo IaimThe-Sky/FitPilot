@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { layout } from "@/components/ui/design-system";
 
 type AppLayoutProps = {
@@ -23,7 +24,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             FitPilot
           </Link>
 
-          <div className="flex w-full items-center gap-2 overflow-x-auto text-sm font-medium text-muted sm:w-auto sm:gap-5">
+          <div className="hidden w-full items-center gap-2 overflow-x-auto text-sm font-medium text-muted lg:flex lg:w-auto lg:gap-5">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -38,6 +39,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       </header>
 
       <main className={layout.main}>{children}</main>
+      <BottomNavigation />
     </div>
   );
 }

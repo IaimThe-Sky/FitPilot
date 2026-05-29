@@ -1,9 +1,21 @@
 "use client";
 
+import { useMemo } from "react";
+import {
+  MealLogCard,
+  type LoggedMeal,
+} from "@/components/dashboard/MealLogCard";
+import {
+  WorkoutLogCard,
+  type LoggedWorkout,
+} from "@/components/dashboard/WorkoutLogCard";
+import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AppCard } from "@/components/ui/AppCard";
 import { sectionSpacing } from "@/components/ui/design-system";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
+import { storageKeys } from "@/lib/storage";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 function readNumber(value: string) {
   const match = value.match(/\d+/);
@@ -28,6 +40,9 @@ type DailyProgressItem = {
   display: string;
 };
 
+const emptyMeals: LoggedMeal[] = [];
+const emptyWorkouts: LoggedWorkout[] = [];
+
 function DailyProgressRow({ item }: { item: DailyProgressItem }) {
   const percent = Math.min(Math.round((item.current / item.goal) * 100), 100);
   const isClose = percent >= 75;
@@ -50,7 +65,7 @@ function DailyProgressRow({ item }: { item: DailyProgressItem }) {
         aria-valuenow={percent}
       >
         <div
-          className={`h-full rounded-control transition-all duration-300 ${
+          className={`h-full rounded-control transition-all duration-500 ease-out ${
             isClose ? "bg-accent" : "bg-[#72b985]"
           }`}
           style={{ width: `${percent}%` }}
@@ -63,8 +78,28 @@ function DailyProgressRow({ item }: { item: DailyProgressItem }) {
 // Use DashboardOverview for the personalized dashboard summary.
 export function DashboardOverview() {
   const { onboardingValues } = useOnboarding();
+  const [meals, setMeals] = useLocalStorageState(
+    storageKeys.meals,
+    emptyMeals,
+  );
+  const [workouts, setWorkouts] = useLocalStorageState(
+    storageKeys.workouts,
+    emptyWorkouts,
+  );
   const name = onboardingValues.name.trim() || "there";
   const goals = getGoals(onboardingValues.weight);
+
+  const mealTotals = useMemo(
+    () =>
+      meals.reduce(
+        (totals, meal) => ({
+          calories: totals.calories + meal.calories,
+          protein: totals.protein + meal.protein,
+        }),
+        { calories: 0, protein: 0 },
+      ),
+    [meals],
+  );
 
   const stats = [
     {
@@ -92,15 +127,15 @@ export function DashboardOverview() {
   const dailyProgress = [
     {
       label: "Calories",
-      current: 1450,
+      current: 1450 + mealTotals.calories,
       goal: goals.calories,
-      display: `1,450 / ${goals.calories.toLocaleString()}`,
+      display: `${(1450 + mealTotals.calories).toLocaleString()} / ${goals.calories.toLocaleString()}`,
     },
     {
       label: "Protein",
-      current: 82,
+      current: 82 + mealTotals.protein,
       goal: goals.protein,
-      display: `82g / ${goals.protein}g`,
+      display: `${82 + mealTotals.protein}g / ${goals.protein}g`,
     },
     {
       label: "Water",
@@ -116,6 +151,26 @@ export function DashboardOverview() {
     },
   ];
 
+  function addMeal(meal: Omit<LoggedMeal, "id">) {
+    setMeals((currentMeals) => [
+      ...currentMeals,
+      {
+        ...meal,
+        id: Date.now(),
+      },
+    ]);
+  }
+
+  function addWorkout(workout: Omit<LoggedWorkout, "id">) {
+    setWorkouts((currentWorkouts) => [
+      ...currentWorkouts,
+      {
+        ...workout,
+        id: Date.now(),
+      },
+    ]);
+  }
+
   return (
     <>
       <AppCard variant="hero" className="max-w-3xl">
@@ -123,6 +178,8 @@ export function DashboardOverview() {
           Your daily goals are ready from your onboarding answers.
         </SectionTitle>
       </AppCard>
+
+      <QuickActions />
 
       <section className={sectionSpacing.grid}>
         {stats.map((stat) => (
@@ -152,6 +209,10 @@ export function DashboardOverview() {
           ))}
         </div>
       </AppCard>
+
+      <MealLogCard meals={meals} onAddMeal={addMeal} />
+
+      <WorkoutLogCard workouts={workouts} onAddWorkout={addWorkout} />
 
       <AppCard
         title="Today's AI Insight"

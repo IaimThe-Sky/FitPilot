@@ -9,6 +9,10 @@ import {
   WorkoutLogCard,
   type LoggedWorkout,
 } from "@/components/dashboard/WorkoutLogCard";
+import {
+  WeightTrackingCard,
+  type WeightEntry,
+} from "@/components/dashboard/WeightTrackingCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AppCard } from "@/components/ui/AppCard";
 import { sectionSpacing } from "@/components/ui/design-system";
@@ -42,6 +46,7 @@ type DailyProgressItem = {
 
 const emptyMeals: LoggedMeal[] = [];
 const emptyWorkouts: LoggedWorkout[] = [];
+const emptyWeights: WeightEntry[] = [];
 
 function DailyProgressRow({ item }: { item: DailyProgressItem }) {
   const percent = Math.min(Math.round((item.current / item.goal) * 100), 100);
@@ -86,8 +91,13 @@ export function DashboardOverview() {
     storageKeys.workouts,
     emptyWorkouts,
   );
+  const [weights, setWeights] = useLocalStorageState(
+    storageKeys.weights,
+    emptyWeights,
+  );
   const name = onboardingValues.name.trim() || "there";
   const goals = getGoals(onboardingValues.weight);
+  const profileWeight = readNumber(onboardingValues.weight) || undefined;
 
   const mealTotals = useMemo(
     () =>
@@ -171,6 +181,16 @@ export function DashboardOverview() {
     ]);
   }
 
+  function addWeight(entry: Omit<WeightEntry, "id">) {
+    setWeights((currentWeights) => [
+      ...currentWeights,
+      {
+        ...entry,
+        id: Date.now(),
+      },
+    ]);
+  }
+
   return (
     <>
       <AppCard variant="hero" className="max-w-3xl">
@@ -213,6 +233,12 @@ export function DashboardOverview() {
       <MealLogCard meals={meals} onAddMeal={addMeal} />
 
       <WorkoutLogCard workouts={workouts} onAddWorkout={addWorkout} />
+
+      <WeightTrackingCard
+        entries={weights}
+        startingWeight={profileWeight}
+        onAddWeight={addWeight}
+      />
 
       <AppCard
         title="Today's AI Insight"

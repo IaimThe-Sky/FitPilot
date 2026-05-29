@@ -23,4 +23,5 @@ export const storageKeys = {
   onboarding: "fitpilot:onboarding",
   meals: "fitpilot:meals",
   workouts: "fitpilot:workouts",
+  weights: "fitpilot:weights",
 } as const;
